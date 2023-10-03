@@ -349,17 +349,20 @@ void il2cpp_dump(const char *outDir) {
     auto domain = il2cpp_domain_get();
     auto assemblies = il2cpp_domain_get_assemblies(domain, &size);
     std::stringstream imageOutput;
+    std::stringstream testOutput;
     for (int i = 0; i < size; ++i) {
         auto image = il2cpp_assembly_get_image(assemblies[i]);
         imageOutput << "// Image " << i << ": " << il2cpp_image_get_name(image) << "\n";
     }
     std::vector<std::string> outPuts;
+    std::vector<std::string> outPuts2;
     if (il2cpp_image_get_class) {
         LOGI("Version greater than 2018.3");
         //使用il2cpp_image_get_class
         for (int i = 0; i < size; ++i) {
             auto image = il2cpp_assembly_get_image(assemblies[i]);
             std::stringstream imageStr;
+            std::stringstream testStr;
             imageStr << "\n// Dll : " << il2cpp_image_get_name(image);
             auto classCount = il2cpp_image_get_class_count(image);
             for (int j = 0; j < classCount; ++j) {
@@ -368,6 +371,15 @@ void il2cpp_dump(const char *outDir) {
                 //LOGD("type name : %s", il2cpp_type_get_name(type));
                 auto outPut = imageStr.str() + dump_type(type);
                 outPuts.push_back(outPut);
+                void *iter = nullptr;
+                while (auto field = il2cpp_class_get_fields(klass, &iter)) {
+                    //TODO
+                    void *value = nullptr;
+                    il2cpp_field_static_get_value(field, &value);
+                    testStr << value.str() << "\n";
+                    auto outPut2 = testStr.str() ;
+                    outPuts2.push_back(outPut2);
+                }
             }
         }
     } else {
@@ -425,5 +437,15 @@ void il2cpp_dump(const char *outDir) {
         outStream << outPuts[i];
     }
     outStream.close();
+    
+    auto outPath2 = std::string(outDir).append("/files/dump1.cs");
+    std::ofstream outStream(outPath2);
+    outStream << testOutput.str();
+    auto count = outPuts2.size();
+    for (int i = 0; i < count; ++i) {
+        outStream << outPuts2[i];
+    }
+    outStream.close();
+    
     LOGI("dump done!");
 }
