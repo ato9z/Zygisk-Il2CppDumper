@@ -372,7 +372,7 @@ void il2cpp_dump(const char *outDir) {
                 auto outPut = imageStr.str() + dump_type(type);
                 outPuts.push_back(outPut);
                 void *iter = nullptr;
-                while (auto field = il2cpp_class_get_fields(klass, &iter)) {
+                while (auto field = il2cpp_class_get_fields(type, &iter)) {
                     //TODO
                     void *value = nullptr;
                     il2cpp_field_static_get_value(field, &value);
@@ -439,13 +439,13 @@ void il2cpp_dump(const char *outDir) {
     outStream.close();
     
     auto outPath2 = std::string(outDir).append("/files/dump1.cs");
-    std::ofstream outStream(outPath2);
-    outStream << testOutput.str();
-    auto count = outPuts2.size();
-    for (int i = 0; i < count; ++i) {
-        outStream << outPuts2[i];
+    std::ofstream outStream2(outPath2);
+    outStream2 << testOutput.str();
+    auto count2 = outPuts2.size();
+    for (int i = 0; i < count2; ++i) {
+        outStream2 << outPuts2[i];
     }
-    outStream.close();
+    outStream2.close();
     
     LOGI("dump done!");
 }
