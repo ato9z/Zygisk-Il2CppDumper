@@ -372,14 +372,17 @@ void il2cpp_dump(const char *outDir) {
                 auto outPut = imageStr.str() + dump_type(type);
                 outPuts.push_back(outPut);
                 void *iter = nullptr;
-                while (auto field = il2cpp_class_get_fields(type, &iter)) {
+                //while (auto field = il2cpp_class_get_fields(type, &iter)) {
                     //TODO
-                    void *value = nullptr;
-                    il2cpp_field_static_get_value(field, &value);
-                    testStr << value.str() << "\n";
-                    auto outPut2 = testStr.str() ;
-                    outPuts2.push_back(outPut2);
-                }
+                //    void *value = nullptr;
+                //    il2cpp_field_static_get_value(field, &value);
+                //    testStr << value.str() << "\n";
+                //    auto outPut2 = testStr.str() ;
+                //    outPuts2.push_back(outPut2);
+                //}
+                testStr << "abcc" << "\n";
+                auto outPut2 = testStr.str() ;
+                outPuts2.push_back(outPut2);
             }
         }
     } else {
